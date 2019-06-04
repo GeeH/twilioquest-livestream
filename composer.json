@@ -1,0 +1,12 @@
+{
+    "name": "ghockin/twilioquest",
+    "authors": [
+        {
+            "name": "Gary Hockin",
+            "email": "gary@hock.in"
+        }
+    ],
+    "require": {
+        "twilio/sdk": "^5.32"
+    }
+}
