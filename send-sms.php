@@ -2,26 +2,30 @@
 
 use Twilio\Rest\Client;
 
-require_once ('./vendor/autoload.php');
+require_once('./vendor/autoload.php');
 
-$toNumber = "+447481360673";
-$fromNumber = "+447480736685";
-$sid = 'ACb877821242bbaedc246328ca0a8c3fc6';
+$toNumbers = ["+447446188852", "+447480736685"];
+
+$messagingServiceSid = "MGde4e7049022f101cc5d2a5eb19e8d5d0";
+$sid = "ACb877821242bbaedc246328ca0a8c3fc6";
 $token = getenv("TWILIO_TOKEN");
 
-
 $time = time();
-$message = "Greetings! The current time is: {$time} FT8CVCBTF01PFKN";
+$message = "Hi.";
 
 $client = new Client($sid, $token);
 
-$response = $client->messages->create(
-    $toNumber,
-    [
-        "from" => $fromNumber,
-        "body" => $message,
-    ]
-);
+foreach ($toNumbers as $toNumber) {
+    for ($i = 0; $i < 10; $i++) {
+        $response = $client->messages->create(
+            $toNumber,
+            [
+                "messagingServiceSid" => $messagingServiceSid,
+                "body" => $message,
+            ]
+        );
+    }
+}
 
 var_dump($response);
 

@@ -30,19 +30,15 @@ function handleCommand(string $command, string $item, array &$todos): MessagingR
     }
 
     if ($command === "list") {
-//        $message = "";
-//        foreach($todos as $key => $todo) {
-//            $message .= $key + 1 . ". " . $todo . " ";
-//        }
+        $message = "";
+        foreach ($todos as $key => $todo) {
+            $message .= $key + 1 . ". " . $todo . " ";
+        }
 
-        $message = array_reduce($todos, function ($carry, $item) {
-            $message = $carry["message"] . $carry["count"] . ". " . $item . " ";
-            $count = $carry["count"] + 1;
-
-            return ["count" => $count, "message" => $message];
-        }, ["count" => 1, "message" => ""])["message"];
-
-        $messagingResponse->message($message);
+        $messagingResponse->message(
+            $message,
+            ['action' => 'http://geeh.ngrok.io/status.php']
+        );
         return $messagingResponse;
     }
 
