@@ -5,7 +5,7 @@ use Twilio\Rest\Client;
 require_once('./vendor/autoload.php');
 
 $sid = "ACb877821242bbaedc246328ca0a8c3fc6";
-$token = getenv("TWILIO_TOKEN");
+$token = new \App\SafeToken(getenv("TWILIO_TOKEN"));
 
 $client = new Client($sid, $token);
 

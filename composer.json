@@ -8,5 +8,10 @@
     ],
     "require": {
         "twilio/sdk": "^5.32"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
     }
 }
