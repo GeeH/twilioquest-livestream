@@ -8,13 +8,14 @@ $fromNo = $_GET['From'];
 $voiceResponse = new VoiceResponse();
 
 if (isset($_POST['Digits']) && $_POST['Digits'] == '1') {
-    $voiceResponse->gather(['input' => 'speech dtmf', 'numDigits' => 1])
+    $voiceResponse->gather(['input' => 'dtmf', 'numDigits' => 1])
         ->say('Press 2 to continue');
 } else if (isset($_POST['Digits']) && $_POST['Digits'] == '2') {
-    $voiceResponse->dial('+44 7588 713956');
+    $voiceResponse->enqueue('Streamtastic');
+    $voiceResponse->record();
 } else {
-    $voiceResponse->gather(['input' => 'speech dtmf', 'numDigits' => 1])
-        ->say('Press 1 to continue');
+    $voiceResponse->gather(['input' => 'dtmf', 'numDigits' => 1])
+        ->say('This call will be recorded. Press 1 to  continue.');
 }
 
 echo $voiceResponse;
