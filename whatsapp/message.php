@@ -18,6 +18,8 @@ echo $response;
 
 function getRandomImageUrl(): string
 {
+    $whitelistedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
     $guzzle = new Client();
     $response = $guzzle->get('https://en.wikipedia.org/api/rest_v1/page/random/title');
 
@@ -34,6 +36,12 @@ function getRandomImageUrl(): string
 
     $response = $guzzle->get($page);
     $response = json_decode((string)$response->getBody());
+
+    $imageType = $response->items[0]->original->mime;
+    if (!in_array($imageType, $whitelistedTypes)) {
+        return getRandomImageUrl();
+    }
+
     return $response->items[0]->original->source;
 }
 
@@ -46,18 +54,20 @@ function handlePost(): MessagingResponse
         return $messagingResponse;
     }
 
-    if(!isset($_SESSION['title']) || empty($_SESSION['title'])) {
+    if (!isset($_SESSION['title']) || empty($_SESSION['title'])) {
         $messagingResponse->message('Please send the word PLAY to start a game');
         return $messagingResponse;
     }
 
-    if(strstr($_SESSION['title'], strtoupper($_POST['Body']))) {
-        $messagingResponse->message('YOU WIN, it was ' . $_SESSION['title']);
+    $titleWords = explode('_', $_SESSION['title']);
+
+    if (in_array(strtoupper($_POST['Body']), $titleWords, true)) {
+        $messagingResponse->message('YOU WIN, it was ' . implode(' ', $titleWords));
         unset($_SESSION['title']);
         return $messagingResponse;
     }
 
-    $messagingResponse->message('YOU LOSE! It was ' . $_SESSION['title']);
+    $messagingResponse->message('YOU LOSE! It was ' . implode(' ', $titleWords));
     unset($_SESSION['title']);
     return $messagingResponse;
 }
